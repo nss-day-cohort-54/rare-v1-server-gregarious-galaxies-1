@@ -87,3 +87,8 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
+
+
+
+
+INSERT INTO `Posts` VALUES (null, 1, 1, "live, laugh, love", 2022,'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3045872-poster-p-1-justin-lime-timberlake-sauza-901.jpg', "Loving this! saw a bird! so random of me", 1);

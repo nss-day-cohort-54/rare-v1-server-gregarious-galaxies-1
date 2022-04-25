@@ -1,0 +1,65 @@
+import sqlite3
+import json
+
+from models.category import Category
+from models.post import Post
+from models.user import User
+
+
+def get_all_posts():
+    # Open a connection to the database
+    with sqlite3.connect("./db.sqlite3") as conn:
+
+        # Just use these. It's a Black Box.
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute("""
+        SELECT
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.image_url,
+            p.content,
+            
+            c.label category_label,
+            u.first_name user_fn,
+            u.last_name user_ln
+        FROM Posts p
+        JOIN Categories c
+            ON c.id = p.category_id
+        JOIN Users u
+            ON u.id = p.user_id
+        
+        """)
+
+        # Initialize an empty list to hold all animal representations
+        posts = []
+
+        # Convert rows of data into a Python list
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+
+            # Create an animal instance from the current row.
+            # Note that the database fields are specified in
+            # exact order of the parameters defined in the
+            # Animal class above.
+            post = Post(row['id'], row['user_id'], row["category_id"], row["title"],
+                        row["publication_date"], row["image_url"], row["content"])
+
+            category = Category(row['category_id'], row['category_label'])
+
+            user = User(row['user_id'], row['user_fn'],
+                        row['user_ln'])
+
+            post.category = category.__dict__
+
+            post.user = user.__dict__
+
+            posts.append(post.__dict__)
+
+        return json.dumps(posts)
