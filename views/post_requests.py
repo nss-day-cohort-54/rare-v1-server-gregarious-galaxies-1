@@ -24,7 +24,6 @@ def get_all_posts():
             p.publication_date,
             p.image_url,
             p.content,
-            
             c.label category_label,
             u.first_name user_fn,
             u.last_name user_ln
@@ -33,7 +32,6 @@ def get_all_posts():
             ON c.id = p.category_id
         JOIN Users u
             ON u.id = p.user_id
-        
         """)
 
         # Initialize an empty list to hold all animal representations
@@ -62,4 +60,4 @@ def get_all_posts():
 
             posts.append(post.__dict__)
 
-        return json.dumps(posts)
+    return json.dumps(posts)

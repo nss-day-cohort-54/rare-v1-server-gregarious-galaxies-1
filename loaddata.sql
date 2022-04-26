@@ -85,10 +85,33 @@ CREATE TABLE "Categories" (
 );
 
 INSERT INTO Categories ('label') VALUES ('News');
+INSERT INTO Categories ('label') VALUES ('Lifestyle');
+INSERT INTO Categories ('label') VALUES ('Music');
+
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
-
-
+INSERT INTO `Users` VALUES (null, 'Alexis', 'Rose', 'ar@mail.com', 'im a little bit alexis', 'arose', 'alexis', null, 2022-4-24, 1);
+INSERT INTO `Users` VALUES (null, 'David', 'Rose', 'dr@mail.com', 'i like the wine not the lable', 'drose', 'david', null, 2022-4-26, 1);
 
 INSERT INTO `Posts` VALUES (null, 1, 1, "live, laugh, love", 2022,'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3045872-poster-p-1-justin-lime-timberlake-sauza-901.jpg', "Loving this! saw a bird! so random of me", 1);
+INSERT INTO `Posts` VALUES (null, 2, 2, "another bird", 2021,'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3045872-poster-p-1-justin-lime-timberlake-sauza-901.jpg', "Wow another bird", 1);
+
+
+
+SELECT
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.image_url,
+            p.content,
+            c.label category_label,
+            u.first_name user_fn,
+            u.last_name user_ln
+        FROM Posts p
+        JOIN Categories c
+            ON c.id = p.category_id
+        JOIN Users u
+            ON u.id = p.user_id
