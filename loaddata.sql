@@ -87,6 +87,9 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Categories ('label') VALUES ('Lifestyle');
 INSERT INTO Categories ('label') VALUES ('Music');
+INSERT INTO Categories ('label') VALUES ('Events');
+INSERT INTO Categories ('label') VALUES ('Home & Decor');
+
 
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');

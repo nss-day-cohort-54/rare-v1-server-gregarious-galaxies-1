@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+from views.category_requests import get_all_categories
 from views.post_requests import get_all_posts
 from views.user_requests import create_user, login_user
 
@@ -57,6 +58,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             (resource, id) = parsed
             if resource == "posts":
                 response = f"{get_all_posts()}"
+            elif resource == "categories":
+                response = f"{get_all_categories()}"
 
         self.wfile.write(f"{response}".encode())
 
