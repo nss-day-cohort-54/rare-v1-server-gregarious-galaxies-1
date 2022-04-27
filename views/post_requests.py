@@ -61,3 +61,31 @@ def get_all_posts():
             posts.append(post.__dict__)
 
     return json.dumps(posts)
+
+
+def create_entry(new_entry):
+    with sqlite3.connect("./dailyjournal.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        INSERT INTO Entries
+            (id, user_id, category_id, title, publication_date, image_url, content)
+        VALUES
+            ( ?, ?, ?, ?);
+        """, (new_entry['user_id'], new_entry['category_id'], new_entry['titlee'],new_entry['publication_date'], new_entry['image_url'], new_entry['content'] ))
+
+        id = db_cursor.lastrowid
+        new_entry['id'] = id
+
+        # loop through the tags after adding new entry
+        # w/n loop execute SQL command to INSERT a row to entrytag table
+        for tag in new_entry['tags']:
+
+            db_cursor.execute("""
+            INSERT INTO EntryTag
+                (entry_id, tag_id)
+            VALUES
+                (?,?);
+            """, (id, tag))
+
+    return json.dumps(new_entry)
