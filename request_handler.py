@@ -59,17 +59,17 @@ class HandleRequests(BaseHTTPRequestHandler):
             (resource, id) = parsed
             if resource == "posts":
                 response = f"{get_all_posts()}"
-<<<<<<< HEAD
+
                 
             if resource == "tags":
                 if id is not None:
                     response = f"{get_single_tag(id)}"
                 else:
-                    response =f"{get_all_tags()}"
-=======
-            elif resource == "categories":
+                    response = f"{get_all_tags()}"
+
+            if resource == "categories":
                 response = f"{get_all_categories()}"
->>>>>>> main
+
 
         self.wfile.write(f"{response}".encode())
 
