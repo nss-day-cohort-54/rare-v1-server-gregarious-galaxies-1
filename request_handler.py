@@ -1,9 +1,11 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+from views.post_requests import get_all_posts, get_single_post
 from views.category_requests import get_all_categories
 from views.post_requests import get_all_posts
 from views.tag_requests import delete_tag, edit_tag, get_all_tags, get_single_tag
 from views.user_requests import create_user, login_user
+
 
 class HandleRequests(BaseHTTPRequestHandler):
     """Handles the requests to this server"""
@@ -57,19 +59,21 @@ class HandleRequests(BaseHTTPRequestHandler):
         parsed = self.parse_url()
         if len(parsed) == 2:
             (resource, id) = parsed
-            if resource == "posts":
-                response = f"{get_all_posts()}"
 
-                
+            if resource == "posts":
+                if id is not None:
+                    response = f"{get_single_post(id)}"
+                else:
+                    response = f"{get_all_posts()}"
+
             if resource == "tags":
                 if id is not None:
                     response = f"{get_single_tag(id)}"
                 else:
-                    response =f"{get_all_tags()}"
+                    response = f"{get_all_tags()}"
 
             elif resource == "categories":
                 response = f"{get_all_categories()}"
-
 
         self.wfile.write(f"{response}".encode())
 
@@ -98,22 +102,22 @@ class HandleRequests(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url()
 
         success = False
-        
+
         if resource == "tags":
             success = edit_tag(id, post_body)
-        
+
         if success:
             self._set_headers(204)
         else:
-            self._set_headers(404)  
-             
-        self.wfile.write("".encode()) 
+            self._set_headers(404)
+
+        self.wfile.write("".encode())
 
     def do_DELETE(self):
         """Handle DELETE Requests"""
         self._set_headers(204)
         (resource, id) = self.parse_url()
-        
+
         if resource == "tags":
             delete_tag(id)
             self.wfile.write("".encode())
