@@ -87,6 +87,9 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Categories ('label') VALUES ('Lifestyle');
 INSERT INTO Categories ('label') VALUES ('Music');
+INSERT INTO Categories ('label') VALUES ('Events');
+INSERT INTO Categories ('label') VALUES ('Home & Decor');
+
 
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
@@ -98,6 +101,14 @@ INSERT INTO `Posts` VALUES (null, 1, 1, "live, laugh, love", 2022,'https://image
 INSERT INTO `Posts` VALUES (null, 2, 2, "another bird", 2021,'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3045872-poster-p-1-justin-lime-timberlake-sauza-901.jpg', "Wow another bird", 1);
 
 DELETE from `Posts` WHERE id = 2;
+INSERT INTO `Tags` VALUES (null, "Fave Band");
+INSERT INTO `Tags` VALUES (null, "Tech News");
+INSERT INTO `Tags` VALUES (null, "Mariah Carey");
+INSERT INTO `Tags` VALUES (null, "Candles");
+INSERT INTO `Tags` VALUES (null, "Thoughts on Life");
+INSERT INTO `Tags` VALUES (null, "Dinner Ideas");
+INSERT INTO `Tags` VALUES (null, "Daily Musings");
+
 
 
 SELECT
