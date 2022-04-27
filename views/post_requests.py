@@ -109,3 +109,50 @@ def get_single_post(id):
         post.user = user.__dict__
 
         return json.dumps(post.__dict__)
+
+
+def get_post_by_user_id(id):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Use a ? parameter to inject a variable's value
+        # into the SQL statement.
+        db_cursor.execute("""
+        SELECT
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.image_url,
+            p.content,
+            c.label category_label,
+            u.first_name user_fn,
+            u.last_name user_ln
+        FROM Posts p
+        JOIN Categories c
+            ON c.id = p.category_id
+        JOIN Users u
+            ON u.id = p.user_id
+        WHERE u.id = ?
+        """, (id, ))
+
+        # Load the single result into memory
+        data = db_cursor.fetchone()
+
+        # Create an animal instance from the current row
+
+        post = Post(data['id'], data['user_id'], data["category_id"], data["title"],
+                    data["publication_date"], data["image_url"], data["content"])
+
+        category = Category(data['category_id'], data['category_label'])
+
+        user = User(data['user_id'], data['user_fn'],
+                    data['user_ln'])
+
+        post.category = category.__dict__
+
+        post.user = user.__dict__
+
+        return json.dumps(post.__dict__)
