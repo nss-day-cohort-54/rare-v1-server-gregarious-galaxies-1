@@ -64,6 +64,33 @@ def get_all_posts():
     return json.dumps(posts)
 
 
+def create_post(new_post):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        INSERT INTO Posts
+            (user_id, category_id, title, publication_date, image_url, content)
+        VALUES
+            ( ?, ?, ?, ?, ?, ?);
+        """, (new_post['user_id'], new_post['category_id'], new_post['title'],new_post['publication_date'], new_post['image_url'], new_post['content'] ))
+
+        id = db_cursor.lastrowid
+        new_post['id'] = id
+
+        # loop through the tags after adding new post
+        # w/n loop execute SQL command to INSERT a row to posttag table
+    
+    #     for tag in new_post['tags']:
+
+    #         db_cursor.execute("""
+    #         INSERT INTO PostTag
+    #             (post_id, tag_id)
+    #         VALUES
+    #             (?,?);
+    #         """, (id, tag))
+    return json.dumps(new_post)
+
 def get_single_post(id):
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
