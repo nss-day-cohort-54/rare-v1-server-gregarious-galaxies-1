@@ -1,2 +1,2 @@
-from .post_requests import get_all_posts
+from .post_requests import get_all_posts, get_single_post, create_post
 from .user_requests import create_user, login_user

@@ -1,7 +1,12 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from views.post_requests import get_all_posts
+from views.category_requests import create_category, get_all_categories
+from views.post_requests import get_all_posts, get_single_post
+
+from views.post_requests import get_all_posts, create_post
+from views.tag_requests import delete_tag, edit_tag, get_all_tags, get_single_tag
 from views.user_requests import create_user, login_user
+
 
 class HandleRequests(BaseHTTPRequestHandler):
     """Handles the requests to this server"""
@@ -55,8 +60,21 @@ class HandleRequests(BaseHTTPRequestHandler):
         parsed = self.parse_url()
         if len(parsed) == 2:
             (resource, id) = parsed
+
             if resource == "posts":
-                response = f"{get_all_posts()}"
+                if id is not None:
+                    response = f"{get_single_post(id)}"
+                else:
+                    response = f"{get_all_posts()}"
+
+            if resource == "tags":
+                if id is not None:
+                    response = f"{get_single_tag(id)}"
+                else:
+                    response = f"{get_all_tags()}"
+
+            elif resource == "categories":
+                response = f"{get_all_categories()}"
 
         self.wfile.write(f"{response}".encode())
 
@@ -72,16 +90,42 @@ class HandleRequests(BaseHTTPRequestHandler):
             response = login_user(post_body)
         if resource == 'register':
             response = create_user(post_body)
+        if resource == "categories":
+            response = create_category(post_body)
+        if resource == "posts":
+            response = create_post(post_body)
 
         self.wfile.write(response.encode())
 
     def do_PUT(self):
         """Handles PUT requests to the server"""
-        pass
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+
+        # Parse the URL
+        (resource, id) = self.parse_url()
+
+        success = False
+
+        if resource == "tags":
+            success = edit_tag(id, post_body)
+
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+
+        self.wfile.write("".encode())
 
     def do_DELETE(self):
         """Handle DELETE Requests"""
-        pass
+        self._set_headers(204)
+        (resource, id) = self.parse_url()
+
+        if resource == "tags":
+            delete_tag(id)
+            self.wfile.write("".encode())
 
 
 def main():
