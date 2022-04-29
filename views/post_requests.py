@@ -1,11 +1,8 @@
 import sqlite3
 import json
-
-
 from models.category import Category
 from models.post import Post
 from models.user import User
-
 
 def get_all_posts():
     # Open a connection to the database
@@ -62,7 +59,6 @@ def get_all_posts():
             posts.append(post.__dict__)
 
     return json.dumps(posts)
-
 
 def create_post(new_post):
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -138,7 +134,6 @@ def get_single_post(id):
 
         return json.dumps(post.__dict__)
 
-
 def get_post_by_user_id(id):
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -185,6 +180,16 @@ def get_post_by_user_id(id):
 
         return json.dumps(post.__dict__)
 
+def delete_post(id):
+    with sqlite3.connect("./db.sqlite3") as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        DELETE FROM Posts
+        WHERE id = ?
+        """, (id, ))
 
 def search_post(search_term):
     with sqlite3.connect("./db.sqlite3") as conn:
