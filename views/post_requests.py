@@ -2,6 +2,7 @@ import sqlite3
 import json
 from models.category import Category
 from models.post import Post
+from models.tag import Tag
 from models.user import User
 
 def get_all_posts():
@@ -55,6 +56,26 @@ def get_all_posts():
             post.category = category.__dict__
 
             post.user = user.__dict__
+            db_cursor.execute("""
+            SELECT
+                t.id,
+                t.label
+            FROM  posts p
+            JOIN posttags pt
+                ON p.id = pt.post_id
+            JOIN tags t
+                ON t.id = pt.tag_id
+            WHERE p.id = ?          
+            """, (post.id, ))
+            # tuple has post id...
+
+            # fetch all tags
+            tagList = db_cursor.fetchall()
+            post.tags= []
+            
+            for row in tagList:
+                tag = Tag(row['id'], row['label'])
+                post.tags.append(tag.__dict__)
 
             posts.append(post.__dict__)
 
@@ -77,14 +98,14 @@ def create_post(new_post):
         # loop through the tags after adding new post
         # w/n loop execute SQL command to INSERT a row to posttag table
 
-    #     for tag in new_post['tags']:
+        for tag in new_post['tags']:
 
-    #         db_cursor.execute("""
-    #         INSERT INTO PostTag
-    #             (post_id, tag_id)
-    #         VALUES
-    #             (?,?);
-    #         """, (id, tag))
+            db_cursor.execute("""
+            INSERT INTO PostTags
+                (post_id, tag_id)
+            VALUES
+                (?,?);
+            """, (id, tag,))
     return json.dumps(new_post)
 
 

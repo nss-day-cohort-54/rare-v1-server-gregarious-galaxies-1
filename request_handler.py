@@ -79,13 +79,6 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             if resource == "categories":
                 response = f"{get_all_categories()}"
-        elif len(parsed) == 3:
-            (resource, key, value) = parsed
-            if key == "q" and resource == "posts":
-                response = search_post(value)
-            if key == "q" and resource == "categories":
-                response = search_category(value)
-
             if resource == "users":
                 if id is not None:
                     response = f"{get_single_user(id)}"
@@ -94,6 +87,12 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             if resource == "comments":
                 response = f"{get_all_comments()}"
+        elif len(parsed) == 3:
+            (resource, key, value) = parsed
+            if key == "q" and resource == "posts":
+                response = search_post(value)
+            if key == "q" and resource == "categories":
+                response = search_category(value)
 
         self.wfile.write(f"{response}".encode())
 
