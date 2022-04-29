@@ -109,6 +109,10 @@ INSERT INTO `Tags` VALUES (null, "Thoughts on Life");
 INSERT INTO `Tags` VALUES (null, "Dinner Ideas");
 INSERT INTO `Tags` VALUES (null, "Daily Musings");
 
+INSERT INTO `Comments` VALUES (null, 1, 2, "Lime head is CREEPY ahhhhh!");
+INSERT INTO `Comments` VALUES (null, 1, 1, "I love lime head!");
+INSERT INTO `Comments` VALUES (null, 3, 2, "Aww so cute lol");
+
 
 
 SELECT
@@ -127,3 +131,20 @@ SELECT
             ON c.id = p.category_id
         JOIN Users u
             ON u.id = p.user_id
+
+ SELECT
+            c.id,
+            c.post_id,
+            c.author_id,
+            c.content,
+            p.id postId,
+            p.title postTitle,
+            u.id authorId,
+            u.first_name authorFirstName,
+            u.last_name authorLastName
+        FROM Comments c
+        JOIN Posts p
+            ON c.post_id = p.id
+        JOIN Users u
+            ON c.author_id = u.id
+        
