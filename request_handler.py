@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from views.category_requests import create_category, get_all_categories
-from views.post_requests import delete_post, get_all_posts, get_single_post, create_post
+from views.post_requests import delete_post, get_all_posts, get_single_post, create_post, search_post
 from views.tag_requests import add_tag, delete_tag, edit_tag, get_all_tags, get_single_tag
 from views.user_requests import create_user, get_all_users, get_single_user, login_user
 
@@ -74,6 +74,10 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             if resource == "categories":
                 response = f"{get_all_categories()}"
+        elif len(parsed) == 3:
+            (resource, key, value) = parsed
+            if key == "q" and resource == "posts":
+                response = search_post(value)
 
             if resource == "users":
                 if id is not None:
