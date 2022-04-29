@@ -2,6 +2,7 @@ import sqlite3
 import json
 from models.category import Category
 
+
 def get_all_categories():
     # Open a connection to the database
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -61,3 +62,31 @@ def create_category(new_category):
         new_category['id'] = id
 
     return json.dumps(new_category)
+
+
+def search_category(search_term):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+    db_cursor.execute("""
+        SELECT
+            c.id,
+            c.label
+        FROM Categories c
+        
+
+        WHERE c.label LIKE ?
+        """, (f"%{search_term}%"))
+
+    dataset = db_cursor.fetchall()
+
+    categories = []
+
+    for row in dataset:
+
+        category = Category(row['id'], row['label'])
+
+        categories.append(category.__dict__)
+
+    return json.dumps(categories)
